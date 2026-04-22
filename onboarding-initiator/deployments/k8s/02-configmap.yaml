@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+
+metadata:
+  name: onboarding-config
+  namespace: onboarding
+
+data:
+
+  APP_ENV: "production"
+  LOG_LEVEL: "info"
+  LISTEN_ADDR: ":8080"
+
+  ############################
+  # POSTGRES
+  ############################
+
+  POSTGRES_HOST: "postgres.upi-cluster.internal"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "onboarding"
+
+  POSTGRES_SSL_MODE: "verify-full"
+  POSTGRES_CA: "/etc/pki/internal/POSTGRES_CA"
+
+  ############################
+  # REDIS (IMPORTANT FIX)
+  ############################
+
+  REDIS_HOST: "redis.upi-cluster.internal"
+
+  REDIS_PORT: "6379"
+
+  REDIS_CA: "/etc/pki/internal/REDIS_CA"
+
+  ############################
+  # KAFKA
+  ############################
+
+  KAFKA_BROKERS: "kafka.upi-cluster.internal:9093"
+
+  KAFKA_SECURITY_PROTOCOL: "SASL_SSL"
+  KAFKA_SASL_MECHANISM: "SCRAM-SHA-512"
+
+  KAFKA_CA: "/etc/pki/internal/KAFKA_CA"
+
+  ############################
+  # TOPIC
+  ############################
+
+  TOPIC_ONBOARD_INIT: "upi-transactions"

@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: onboarding
+  namespace: onboarding
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: onboarding
+  template:
+    metadata:
+      labels:
+        app: onboarding
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - name: onboarding
+        image: karthik1209/onboarding:v5
+        ports:
+        - containerPort: 8080
+        
+        envFrom:
+        - configMapRef:
+            name: onboarding-config
+        - secretRef:
+            name: onboarding-secret
+            
+        # FIXED: Shifted left to be a property of the container
+        volumeMounts:
+        - name: ca-certs
+          mountPath: /etc/pki/internal
+          readOnly: true
+          
+        resources:
+          requests:
+            cpu: 200m
+            memory: 256Mi
+          limits:
+            cpu: 1
+            memory: 1Gi
+            
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 15
+          
+      # FIXED: Shifted left to be a property of the pod spec (sibling to containers)
+      volumes:
+      - name: ca-certs
+        hostPath: # FIXED: Capitalized the 'P'
+          path: /etc/pki/internal # FIXED: Changed 'interval' to 'internal'
+          type: Directory

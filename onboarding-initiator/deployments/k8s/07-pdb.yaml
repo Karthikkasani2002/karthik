@@ -1,0 +1,18 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+
+metadata:
+
+  name: onboarding
+
+  namespace: onboarding
+
+spec:
+
+  minAvailable: 0
+
+  selector:
+
+    matchLabels:
+
+      app: onboarding

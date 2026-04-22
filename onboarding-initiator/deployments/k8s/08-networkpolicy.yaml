@@ -1,0 +1,45 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+
+metadata:
+  name: onboarding
+  namespace: onboarding
+
+spec:
+
+  podSelector:
+    matchLabels:
+      app: onboarding
+
+  policyTypes:
+  - Ingress
+  - Egress
+
+  ingress:
+
+  - from:
+
+    - namespaceSelector: {}
+
+  egress:
+
+  - to:
+
+    - ipBlock:
+        cidr: 192.168.14.145/32
+
+    ports:
+
+    - protocol: TCP
+      port: 6379
+
+    - protocol: TCP
+      port: 5432
+
+    - protocol: TCP
+      port: 9093
+
+  - to:
+
+    - namespaceSelector: {}
+
