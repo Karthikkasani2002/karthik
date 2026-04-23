@@ -1,19 +1,19 @@
 format_version: 10
 
 pipelines:
-  onboarding-service:
+  onboarding-service-v1:
     group: upi
 
     materials:
       git:
-        git: https://github.com/Karthikkasni2002/karthik.git
+        git: https://Karthikkasani2002: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@github.com/Karthikkasani2002/karthik.git
         branch: main
 
     stages:
       - build:
           jobs:
-            build-job:
+            compile:
               tasks:
                 - exec:
                     command: echo
-                    arguments: ["Hello GoCD Pipeline Working"]
+                    arguments: ["Pipeline working fine"]
