@@ -1,19 +1,58 @@
 format_version: 10
 
 pipelines:
-  onboarding-service-v1:
+  onboarding-service:
     group: upi
 
     materials:
       git:
-        git: https://Karthikkasani2002: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@github.com/Karthikkasani2002/karthik.git
+        url: https://Karthikkasani2002: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@github.com/Karthikkasani2002/karthik.git
         branch: main
 
     stages:
-      - build:
-          jobs:
-            compile:
-              tasks:
-                - exec:
-                    command: echo
-                    arguments: ["Pipeline working fine"]
+
+    - stage: build
+      jobs:
+      - job: compile
+        tasks:
+        - exec:
+            command: sh
+            arguments:
+            - -c
+            - |
+              cd onboarding-initiator
+              go build -o app ./cmd/service
+
+    - stage: docker-build
+      jobs:
+      - job: docker
+        tasks:
+        - exec:
+            command: sh
+            arguments:
+            - -c
+            - |
+              cd onboarding-initiator
+              docker build -t karthik1209/onboarding:v1 -f deployments/Dockerfile .
+
+    - stage: docker-push
+      jobs:
+      - job: push
+        tasks:
+        - exec:
+            command: sh
+            arguments:
+            - -c
+            - |
+              docker push karthik1209/onboarding:v1
+
+    - stage: deploy
+      jobs:
+      - job: k8s-deploy
+        tasks:
+        - exec:
+            command: sh
+            arguments:
+            - -c
+            - |
+              kubectl apply -f onboarding-initiator/deployments/k8s/
