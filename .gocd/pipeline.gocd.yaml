@@ -13,46 +13,46 @@ pipelines:
 
     - build:
         jobs:
-        - compile:
+          compile:
             tasks:
-            - exec:
-                command: sh
-                arguments:
-                - -c
-                - |
-                  cd onboarding-initiator
-                  go build -o app ./cmd/service
+              - exec:
+                  command: sh
+                  arguments:
+                    - -c
+                    - |
+                      cd onboarding-initiator
+                      go build -o app ./cmd/service
 
     - docker-build:
         jobs:
-        - docker:
+          docker:
             tasks:
-            - exec:
-                command: sh
-                arguments:
-                - -c
-                - |
-                  cd onboarding-initiator
-                  docker build -t karthik1209/onboarding:v1 -f deployments/Dockerfile .
+              - exec:
+                  command: sh
+                  arguments:
+                    - -c
+                    - |
+                      cd onboarding-initiator
+                      docker build -t karthik1209/onboarding:v1 -f deployments/Dockerfile .
 
     - docker-push:
         jobs:
-        - push:
+          push:
             tasks:
-            - exec:
-                command: sh
-                arguments:
-                - -c
-                - |
-                  docker push karthik1209/onboarding:v1
+              - exec:
+                  command: sh
+                  arguments:
+                    - -c
+                    - |
+                      docker push karthik1209/onboarding:v1
 
     - deploy:
         jobs:
-        - k8s-deploy:
+          k8s-deploy:
             tasks:
-            - exec:
-                command: sh
-                arguments:
-                - -c
-                - |
-                  kubectl apply -f onboarding-initiator/deployments/k8s/
+              - exec:
+                  command: sh
+                  arguments:
+                    - -c
+                    - |
+                      kubectl apply -f onboarding-initiator/deployments/k8s/
