@@ -21,30 +21,23 @@ pipelines:
                     - -c
                     - |
                       cd onboarding-initiator
-                      sudo go build -o app ./cmd/service
+                      go build -o app ./cmd/service
 
-    - docker-build:
+    - image-build-and-push:
         jobs:
-          docker:
+          kaniko:
             tasks:
               - exec:
                   command: sh
                   arguments:
                     - -c
                     - |
-                      cd onboarding-initiator
-                      sudo docker build -t karthik1209/onboarding:v8 -f deployments/Dockerfile .
-
-    - docker-push:
-        jobs:
-          push:
-            tasks:
-              - exec:
-                  command: sh
-                  arguments:
-                    - -c
-                    - |
-                      sudo docker push karthik1209/onboarding:v8
+                      /kaniko/executor \
+                        --dockerfile=onboarding-initiator/deployments/Dockerfile \
+                        --context=$(pwd)/onboarding-initiator \
+                        --destination=karthik1209/onboarding:v8 \
+                        --insecure \
+                        --skip-tls-verify
 
     - deploy:
         jobs:
