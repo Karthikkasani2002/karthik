@@ -21,7 +21,7 @@ pipelines:
                     - -c
                     - |
                       cd onboarding-initiator
-                      go build -o app ./cmd/service
+                      sudo go build -o app ./cmd/service
 
     - docker-build:
         jobs:
@@ -33,7 +33,7 @@ pipelines:
                     - -c
                     - |
                       cd onboarding-initiator
-                      docker build -t karthik1209/onboarding:v1 -f deployments/Dockerfile .
+                      sudo docker build -t karthik1209/onboarding:v8 -f deployments/Dockerfile .
 
     - docker-push:
         jobs:
@@ -44,7 +44,7 @@ pipelines:
                   arguments:
                     - -c
                     - |
-                      docker push karthik1209/onboarding:v1
+                      sudo docker push karthik1209/onboarding:v8
 
     - deploy:
         jobs:
