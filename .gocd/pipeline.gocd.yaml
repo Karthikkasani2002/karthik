@@ -4,6 +4,10 @@ pipelines:
   onboarding-service:
     group: upi
 
+    environment_variables:
+      DOCKER_USERNAME: karthik1209
+      DOCKER_PASSWORD: Olive@1444   # 🔥 replace with Docker Hub token
+
     materials:
       git:
         git: https://github.com/Karthikkasani2002/karthik.git
@@ -44,6 +48,7 @@ pipelines:
                   arguments:
                     - -c
                     - |
+                      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
                       docker push karthik1209/onboarding:v8
 
     - deploy:
